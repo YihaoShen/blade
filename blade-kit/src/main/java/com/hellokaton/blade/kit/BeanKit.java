@@ -99,5 +99,40 @@ public class BeanKit {
             throw new BeanCopyException(e);
         }
     }
+    /**
+     *
+     * @param origin the origin object
+     * @param dest  the destination object
+     * @param ignoreProperties the fields you want to ignore
+     * @author Yihao Shen
+     */
+    public static void copy(Object origin, Object dest, String... ignoreProperties) {
+        if (origin == null || dest == null) {
+            throw new IllegalArgumentException("The source object and destination object must not be null.");
+        }
+
+        List<String> ignoreList = Arrays.asList(ignoreProperties);
+
+        Class<?> originClass = origin.getClass();
+        Class<?> dstClass = dest.getClass();
+
+        Field[] srcFields = originClass.getDeclaredFields();
+        // copy field
+        for (Field srcField : srcFields) {
+            if (!ignoreList.contains(srcField.getName())) {
+                try {
+                    Field dstField = null;
+                    dstField = dstClass.getDeclaredField(srcField.getName());
+                    if (srcField.getType().equals(dstField.getType())) {
+                        srcField.setAccessible(true);
+                        dstField.setAccessible(true);
+                        dstField.set(dest, srcField.get(origin));
+                    }
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
 }
