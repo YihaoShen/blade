@@ -15,6 +15,7 @@
  */
 package com.hellokaton.blade.kit;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.*;
@@ -149,5 +150,4 @@ public class CollectionKit {
         }
         return new HashSet<>(Arrays.asList(values));
     }
-
 }
